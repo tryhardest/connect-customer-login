@@ -1,0 +1,14 @@
+{
+  "name": "connect-customer-login",
+  "version": "1.0.0",
+  "description": "Layer Connect customer login redirect",
+  "main": "index.js",
+  "author": "Layer <support@layer.com>",
+  "license": "ISC",
+  "scripts": {
+    "start": "node server"
+  },
+  "dependencies": {
+    "koa": "^2.5.0"
+  }
+}

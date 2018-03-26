@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <link rel="shortcut icon" href="https://s3.amazonaws.com/static.layer.com/web/favicon.png">
+
+    <title>Connect Customer Login</title>
+
+    <style>
+    body {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    form {
+      display: table;
+      width: 320px;
+      font-family: monospace;
+      font-size: 1rem;
+    }
+    form input {
+      width: 100%;
+    }
+    form button {
+      margin: 20px 0px;
+      padding: 2px 20px;
+    }
+    </style>
+
+    <script>
+    const CONSOLE_URL = "{{CUSTOMER_CONSOLE_URL}}";
+
+    (function() {
+      const onLogin = (event) => {
+        event.preventDefault();
+        const elements = event.target.elements;
+
+        fetch(`${CONSOLE_URL}/api/tokens`, {
+          method: "POST",
+          headers: new Headers({
+            "Access-Control-Request-Method": "POST",
+            "Content-Type": "plain/text"
+          }),
+          body: JSON.stringify({
+            id: Math.random()
+              .toString(36)
+              .substr(2),
+            first_name: elements.first_name.value,
+            last_name: elements.last_name.value,
+            display_name: elements.display_name.value,
+            email: elements.email.value,
+            phone_number: elements.phone_number.value,
+            avatar_url: elements.avatar_url.value,
+            metadata: {}
+          })
+        })
+          .then(res => res.text())
+          .then(token => {
+            window.location = `${CONSOLE_URL}?token=${token}`;
+          });
+      }
+
+      document.addEventListener("DOMContentLoaded", function(event) {
+        document.getElementById("login-form").addEventListener("submit", onLogin);
+      });
+    })();
+    </script>
+  </head>
+  <body>
+    <h2>Connect Customer Login</h2>
+    <p>Redirecting to: {{CUSTOMER_CONSOLE_URL}}</p>
+
+    <form id="login-form">
+      <input placeholder="First name" value="" name="first_name" type="text"><br>
+      <input placeholder="Last name" value="" name="last_name" type="text"><br>
+      <input placeholder="Display name" value="" name="display_name" type="text"><br>
+      <input placeholder="Email" value="" name="email" type="email"><br>
+      <input placeholder="Phone number" value="" name="phone_number" type="text"><br>
+      <input placeholder="Avatar URL" value="https://avatars.io/static/default_128.jpg" name="avatar_url" type="text"><br>
+
+      <button type="submit">Login</button>
+    </form>
+  </body>
+</html>
