@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#000000">
     <link rel="shortcut icon" href="https://s3.amazonaws.com/static.layer.com/web/favicon.png">
 
-    <title>Connect Customer Login</title>
+    <title>{{CUSTOMER_CONSOLE_NAME}}</title>
 
     <style>
     body {
@@ -15,7 +15,7 @@
     }
     form {
       display: table;
-      width: 320px;
+      width: 380px;
       font-family: monospace;
       font-size: 1rem;
     }
@@ -23,8 +23,13 @@
       width: 100%;
     }
     form button {
+      float: right;
       margin: 20px 0px;
       padding: 2px 20px;
+    }
+    form a {
+      display: block;
+      margin-top: 26px;
     }
     </style>
 
@@ -61,25 +66,44 @@
           });
       }
 
+      const onRandomUser = (event) => {
+        event.preventDefault();
+        fetch("https://randomuser.me/api/?nat=us")
+          .then(res => res.json())
+          .then(({ results }) => {
+            const fake = results[0]
+            const inputs = document.getElementsByTagName('input')
+
+            inputs['first_name'].value = fake.name.first
+            inputs['last_name'].value = fake.name.last
+            inputs['display_name'].value = `${fake.name.first} ${fake.name.last}`
+            inputs['email'].value = fake.email
+            inputs['phone_number'].value = fake.phone
+            inputs['avatar_url'].value = fake.picture.large
+          })
+      }
+
       document.addEventListener("DOMContentLoaded", function(event) {
         document.getElementById("login-form").addEventListener("submit", onLogin);
+        document.getElementById("random-user").addEventListener("click", onRandomUser);
       });
     })();
     </script>
   </head>
   <body>
-    <h2>Connect Customer Login</h2>
+    <h2>{{CUSTOMER_CONSOLE_NAME}}</h2>
     <p>Redirecting to: {{CUSTOMER_CONSOLE_URL}}</p>
 
     <form id="login-form">
-      <input placeholder="First name" value="" name="first_name" type="text"><br>
+      <input placeholder="First name" value="" name="first_name" type="text" autocapitalize><br>
       <input placeholder="Last name" value="" name="last_name" type="text"><br>
       <input placeholder="Display name" value="" name="display_name" type="text"><br>
       <input placeholder="Email" value="" name="email" type="email"><br>
       <input placeholder="Phone number" value="" name="phone_number" type="text"><br>
-      <input placeholder="Avatar URL" value="https://avatars.io/static/default_128.jpg" name="avatar_url" type="text"><br>
+      <input placeholder="Avatar URL" value="" name="avatar_url" type="text"><br>
 
       <button type="submit">Login</button>
+      <a href="#" id="random-user">random user</a>
     </form>
   </body>
 </html>
