@@ -36,59 +36,59 @@
     <script>
     const CONSOLE_URL = "{{CUSTOMER_CONSOLE_URL}}";
 
-    (function() {
-      const onLogin = (event) => {
-        event.preventDefault();
-        const elements = event.target.elements;
+(function() {
+  const onLogin = event => {
+    event.preventDefault();
+    const elements = event.target.elements;
 
-        fetch(`${CONSOLE_URL}/api/tokens`, {
-          method: "POST",
-          headers: new Headers({
-            "Access-Control-Request-Method": "POST",
-            "Content-Type": "plain/text"
-          }),
-          body: JSON.stringify({
-            id: Math.random()
-              .toString(36)
-              .substr(2),
-            first_name: elements.first_name.value,
-            last_name: elements.last_name.value,
-            display_name: elements.display_name.value,
-            email: elements.email.value,
-            phone_number: elements.phone_number.value,
-            avatar_url: elements.avatar_url.value,
-            metadata: {}
-          })
-        })
-          .then(res => res.text())
-          .then(token => {
-            window.location = `${CONSOLE_URL}?token=${token}`;
-          });
-      }
-
-      const onRandomUser = (event) => {
-        event.preventDefault();
-        fetch("https://randomuser.me/api/?nat=us")
-          .then(res => res.json())
-          .then(({ results }) => {
-            const fake = results[0]
-            const inputs = document.getElementsByTagName('input')
-
-            inputs['first_name'].value = fake.name.first
-            inputs['last_name'].value = fake.name.last
-            inputs['display_name'].value = `${fake.name.first} ${fake.name.last}`
-            inputs['email'].value = fake.email
-            inputs['phone_number'].value = fake.phone
-            inputs['avatar_url'].value = fake.picture.large
-          })
-      }
-
-      document.addEventListener("DOMContentLoaded", function(event) {
-        document.getElementById("login-form").addEventListener("submit", onLogin);
-        document.getElementById("random-user").addEventListener("click", onRandomUser);
+    fetch(`${CONSOLE_URL}/api/tokens`, {
+      method: "POST",
+      headers: new Headers({
+        "Access-Control-Request-Method": "POST",
+        "Content-Type": "plain/text"
+      }),
+      body: JSON.stringify({
+        id: elements.email.value,
+        first_name: elements.first_name.value,
+        last_name: elements.last_name.value,
+        display_name: elements.display_name.value,
+        email: elements.email.value,
+        phone_number: elements.phone_number.value,
+        avatar_url: elements.avatar_url.value,
+        metadata: {}
+      })
+    })
+      .then(res => res.text())
+      .then(token => {
+        window.location = `${CONSOLE_URL}?token=${token}`;
       });
-    })();
-    </script>
+  };
+
+  const onRandomUser = event => {
+    event.preventDefault();
+    fetch("https://randomuser.me/api/?nat=us")
+      .then(res => res.json())
+      .then(({ results }) => {
+        const fake = results[0];
+        const inputs = document.getElementsByTagName("input");
+
+        inputs["first_name"].value = fake.name.first;
+        inputs["last_name"].value = fake.name.last;
+        inputs["display_name"].value = `${fake.name.first} ${fake.name.last}`;
+        inputs["email"].value = fake.email;
+        inputs["phone_number"].value = fake.phone;
+        inputs["avatar_url"].value = fake.picture.large;
+      });
+  };
+
+  document.addEventListener("DOMContentLoaded", function(event) {
+    document.getElementById("login-form").addEventListener("submit", onLogin);
+    document
+      .getElementById("random-user")
+      .addEventListener("click", onRandomUser);
+  });
+})();
+</script>
   </head>
   <body>
     <h2>{{CUSTOMER_CONSOLE_NAME}}</h2>
