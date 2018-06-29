@@ -1,4 +1,4 @@
-# Amex Customer Login
+# Layer Connect fake customer login
 
 This is a simple server that enables Layer Connect customer login by generating a JWE token and redirecting to customer console.
 
